@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.0.90:5000";
+const API_URL = "http://192.168.1.13:5000";
 
 // Axios instance
 const api = axios.create({
@@ -74,3 +74,36 @@ export const getCompletedTasks = async () => {
     throw error;
   }
 };
+
+// Toggle task status
+export const toggleTaskStatus = async (taskId: number) => {
+  try {
+    const response = await api.put(`/tasks/${taskId}/toggle`);
+    return response.data;
+  } catch (error) {
+    console.error("Error toggling task status:", error);
+    throw error;
+  }
+}
+
+// Get categories
+export const getCategories = async () => {
+  try {
+    const response = await api.get("/tasks/categories");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+}
+
+// Fetch tasks by category
+export const getTasksByCategory = async (category: string) => {
+  try {
+    const response = await api.get(`/tasks/category/${category}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching tasks by category:", error);
+    throw error;
+  }
+}

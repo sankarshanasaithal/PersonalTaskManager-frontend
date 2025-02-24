@@ -1,7 +1,7 @@
 import { View, Text, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { getCompletedTasks } from '../services/api';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 export default function CompletedTasksScreen() {
   const [tasks, setCompletedTasks] = useState<any[]>([]);
@@ -9,9 +9,11 @@ export default function CompletedTasksScreen() {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTasks();
+    }, [])
+  );
 
   const fetchTasks = async () => {
     try {

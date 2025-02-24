@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
-import { getTasks } from '../services/api';
+import { getTasks, deleteTask, toggleTaskStatus } from '../services/api';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 export default function TaskCards() {
@@ -11,12 +11,30 @@ export default function TaskCards() {
 
     useFocusEffect(
         useCallback(() => {
-            fetchTasks(); 
+            fetchTasks();
         }, [])
     );
 
     const handleEdit = (task) => {
-        navigation.navigate('TaskForm', { task }); 
+        navigation.navigate('TaskForm', { task });
+    };
+
+    const handleDelete = async (taskId) => {
+        try {
+            await deleteTask(taskId);
+            fetchTasks();
+        } catch (error) {
+            console.error('Failed to delete task:', error);
+        }
+    };
+
+    const handleToggleStatus = async (taskId) => {
+        try {
+            await toggleTaskStatus(taskId);
+            await fetchTasks(); // Make sure to wait for the toggle before refreshing
+        } catch (error) {
+            console.error('Failed to toggle task status:', error);
+        }
     };
 
     useEffect(() => {
@@ -55,23 +73,26 @@ export default function TaskCards() {
                                     <Text>{item.category}</Text>
                                     <Text style={{
                                         color: item.priority === "High" ? "red" : item.priority === "Medium" ? "orange" : "green",
-                                        backgroundColor: item.priority === "High" ? "#ffcccc" : item.priority === "Medium" ? "#ffe5b4" : "#ccffcc",
+                                        // backgroundColor: item.priority === "High" ? "#ffcccc" : item.priority === "Medium" ? "#ffe5b4" : "#ccffcc",
                                         paddingHorizontal: 3
                                     }}>{item.priority}</Text>
                                 </View>
                                 <Text style={{ fontSize: 18, fontWeight: "bold" }}>{item.title}</Text>
                                 <Text>{item.description}</Text>
-                                <View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 10 }}>
-                                    <Text style={{ fontWeight: 'bold' }}>{item.dueDate}</Text>
+                                <View style={{ flexDirection: "row-reverse", justifyContent: "space-between", paddingTop: 10 }}>
+                                    {/* <Text style={{ fontWeight: 'bold' }}>{item.dueDate}</Text> */}
                                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                                         <TouchableOpacity style={{ marginRight: 10 }} onPress={() => handleEdit(item)}>
                                             <Text style={{ color: "blue" }}>Edit</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity>
+                                        <TouchableOpacity onPress={() => handleDelete(item.id)}>
                                             <Text style={{ color: "red" }}>Delete</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
+                                <TouchableOpacity style={{ padding: 5, backgroundColor: item.completed === false ? "red" : "green", borderRadius: 5, marginTop: 10 }} onPress={() => handleToggleStatus(item.id)}>
+                                    <Text style={{ color: "white", textAlign: "center" }} >{item.completed === false ? "Pending" : "Completed"}</Text>
+                                </TouchableOpacity>
                             </TouchableOpacity>
                         )}
                     />

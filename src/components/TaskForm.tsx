@@ -8,7 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const TaskSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     description: Yup.string(),
-    dueDate: Yup.string().required('Due Date is required'),
+    completed: Yup.string(),
     priority: Yup.string().required('Priority is required'),
     category: Yup.string().required('Category is required'),
 });
@@ -46,10 +46,9 @@ export default function TaskForm() {
         }
     };
 
-
     return (
         <Formik
-            initialValues={{ title: '', description: '', dueDate: '', priority: '', category: '' }}
+            initialValues={{ title: '', description: '', completed: '', priority: '', category: '' }}
             validationSchema={TaskSchema}
             onSubmit={handleSubmit}
         >
@@ -73,14 +72,14 @@ export default function TaskForm() {
                     />
                     {errors.description && touched.description ? <Text style={styles.error}>{errors.description}</Text> : null}
 
-                    <Text style={styles.label}>Due Date</Text>
+                    {/* <Text style={styles.label}>Due Date</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={handleChange('dueDate')}
                         onBlur={handleBlur('dueDate')}
                         value={values.dueDate}
                     />
-                    {errors.dueDate && touched.dueDate ? <Text style={styles.error}>{errors.dueDate}</Text> : null}
+                    {errors.dueDate && touched.dueDate ? <Text style={styles.error}>{errors.dueDate}</Text> : null} */}
 
                     <Text style={styles.label}>Priority</Text>
                     <TextInput
