@@ -72,15 +72,6 @@ export default function TaskForm() {
                     />
                     {errors.description && touched.description ? <Text style={styles.error}>{errors.description}</Text> : null}
 
-                    {/* <Text style={styles.label}>Due Date</Text>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={handleChange('dueDate')}
-                        onBlur={handleBlur('dueDate')}
-                        value={values.dueDate}
-                    />
-                    {errors.dueDate && touched.dueDate ? <Text style={styles.error}>{errors.dueDate}</Text> : null} */}
-
                     <Text style={styles.label}>Priority</Text>
                     <TextInput
                         style={styles.input}

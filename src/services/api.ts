@@ -86,7 +86,6 @@ export const toggleTaskStatus = async (taskId: number) => {
   }
 }
 
-// Get categories
 export const getCategories = async () => {
   try {
     const response = await api.get("/tasks/categories");
@@ -95,15 +94,14 @@ export const getCategories = async () => {
     console.error("Error fetching categories:", error);
     throw error;
   }
-}
+};
 
-// Fetch tasks by category
 export const getTasksByCategory = async (category: string) => {
   try {
     const response = await api.get(`/tasks/category/${category}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching tasks by category:", error);
+    console.error(`Error fetching tasks for category ${category}:`, error);
     throw error;
   }
-}
+};
